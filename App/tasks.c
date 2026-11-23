@@ -11,6 +11,7 @@
 #include "Std_Types.h"
 #include "scheduler.h"
 #include "tasks.h"
+#include "ModSt.h"
 
 /* Set to STD_ON to toggle a pin in each task for scope measurements.
  * Configure the pins as Dio channels in S32 Config Tools and put the
@@ -55,7 +56,10 @@ void Task_1ms(void)
 void Task_10ms(void)
 {
     DBG_TOGGLE(DBG_PIN_10MS);
-    /* e.g. CAN signal processing, debouncing inputs */
+
+    /* Call order = data-flow order: inputs -> processing -> outputs */
+    ModSt_Cyclic();          /* system mode / state manager (example module) */
+    /* add further 10 ms functions here, e.g. InputProc_Cyclic(); */
 }
 
 void Task_100ms(void)
