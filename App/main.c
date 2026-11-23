@@ -12,6 +12,7 @@
 #include "Platform.h"
 #include "Gpt.h"
 #include "scheduler.h"
+#include "ModSt.h"
 
 int main(void)
 {
@@ -39,7 +40,11 @@ int main(void)
     /* 5. Tick timer driver */
     Gpt_Init(NULL_PTR);
 
-    /* 6. Scheduler */
+    /* 6. Application modules: every module's Init runs once, before the
+     *    first task release, so no Cyclic() ever sees uninitialised data */
+    ModSt_Init();
+
+    /* 7. Scheduler */
     Sched_Init();
     Sched_Start();
     Sched_Run();        /* never returns */
